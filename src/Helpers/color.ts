@@ -1,3 +1,4 @@
 export const colorizer = {
-    backgroundColor:'rgb(#97ABFF,)'
+    backgroundColor: ['#97ABFF', '#123597'],
+    buttonColor: '#1D3C66'
 }
