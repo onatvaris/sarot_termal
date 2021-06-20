@@ -5,28 +5,59 @@ import {
     Dimensions,
     TextInput,
     Image,
-    KeyboardAvoidingView,
+    TouchableWithoutFeedback,
     Platform,
     TouchableOpacity,
-    StyleSheet
+    StyleSheet,
+    Alert,
+    Keyboard
 } from 'react-native'
 import { RootStackParamList } from '../Route/type'
 import LinearGradient from 'react-native-linear-gradient';
 import { colorizer } from '../Helpers/color';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { Data } from '../Utils/Data';
+import { useDispatch } from 'react-redux';
+import { loginAction } from '../Redux';
 const { height, width } = Dimensions.get('window');
 interface LoginProps {
     navigation: StackNavigationProp<RootStackParamList, 'Login'>
 }
 
 const Login: React.FunctionComponent<LoginProps> = ({ navigation }) => {
-
+    const [Name, setName] = useState('')
+    const [Password, setPassword] = useState('')
     const [secure, setSecure] = useState(false)
     const [check, setCheck] = useState(false)
+    const dispatch = useDispatch()
+    const LoginAction = () => {
+        if (Name && Password) {
+            const field = Data.find((item) => item.name = 'Ercan Demir')
+            if (Password === field?.password) {
+                dispatch(loginAction(field))
+                navigation.reset({ index: 0, routes: [{ name: 'Main' }] })
+            } else {
+                Alert.alert('Hatalı Şifre', 'Tekrar deneyin', [
+                    {
+                        text: 'Tamam',
+                        onPress: () => console.log("ok pressed")
+                    }
+                ])
+            }
+        } else {
+            Alert.alert('Eksik Bilgi Girdiniz', 'Tekrar deneyin', [
+                {
+                    text: 'Tamam',
+                    onPress: () => console.log("ok pressed")
+                }
+            ])
+        }
+    }
 
     return (
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <LinearGradient colors={colorizer.backgroundColor} style={{ flex: 1 }}>
+
                 <View style={{ alignItems: 'center', height: hp('30%'), justifyContent: 'center' }}>
                     <Image
                         style={{ height: 86, width: 357, resizeMode: 'contain' }}
@@ -42,6 +73,7 @@ const Login: React.FunctionComponent<LoginProps> = ({ navigation }) => {
                                 source={require('../Assets/account_circle.png')}
                             />
                             <TextInput
+                                onChangeText={setName}
                                 placeholder='Kullanıcı Adı'
                                 placeholderTextColor='#ccc'
                                 style={{ flex: 1, marginLeft: 10 }} />
@@ -52,6 +84,7 @@ const Login: React.FunctionComponent<LoginProps> = ({ navigation }) => {
                                 source={require('../Assets/vpn_key.png')}
                             />
                             <TextInput
+                                onChangeText={setPassword}
                                 placeholder='Şifre'
                                 placeholderTextColor='#ccc'
                                 secureTextEntry={secure}
@@ -82,14 +115,14 @@ const Login: React.FunctionComponent<LoginProps> = ({ navigation }) => {
                         </View>
 
                         <TouchableOpacity
-                            onPress={() => navigation.reset({ index: 0, routes: [{ name: 'Main' }] })}
+                            onPress={() => LoginAction()}
                             style={styles.button}>
                             <Text style={{ color: '#fff', fontSize: 18 }}>Giriş Yap</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </LinearGradient>
-        </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
     )
 }
 
