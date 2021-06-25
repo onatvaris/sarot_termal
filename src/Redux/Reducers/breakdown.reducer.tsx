@@ -1,5 +1,4 @@
-import Breakdown from "../../Pages/Breakdown";
-import { ADD_BREAKDOWN, BreakdownActionTypes, UserBreakdownInterface } from "../Types";
+import { ADD_BREAKDOWN, ADD_SOLUTION, BreakdownActionTypes, UserBreakdownInterface } from "../Types";
 
 const initialState: UserBreakdownInterface = {
     breakdowns: []
@@ -11,7 +10,14 @@ export function breakdownReducer(state = initialState, action: BreakdownActionTy
             return {
                 breakdowns: [...state.breakdowns, action.payload]
             }
-
+        case ADD_SOLUTION:
+            console.log(`action`, action.payload)
+            state.breakdowns.find((arr, index) => {
+                if (arr.no === action.payload.breakdownNo) {
+                    state.breakdowns[index].solution = action.payload
+                }
+            })
+            return state
         default:
             return state;
     }

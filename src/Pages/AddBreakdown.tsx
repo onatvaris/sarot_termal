@@ -3,26 +3,22 @@ import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import {
-    StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform,
+    StyleSheet, Text, View, TextInput,
     ScrollView
 } from 'react-native'
-import { heightPercentageToDP } from 'react-native-responsive-screen'
 import { useDispatch, useSelector } from 'react-redux'
-import { TypeData } from './Main'
 import { addBreakdown, RootState } from '../Redux'
 import DesignButton from '../Components/DesignButton'
 import LinearGradient from 'react-native-linear-gradient'
 import { colorizer } from '../Helpers/color'
 import { RootStackParamList } from '../Route/type'
-import { Breakdown, User } from '../Redux/Types'
 
 
 interface Props {
-    item?: TypeData
     navigation: StackNavigationProp<RootStackParamList, 'AddBreakdown'>
 }
 
-const AddBreakdown = ({ item, navigation }: Props) => {
+const AddBreakdown = ({ navigation }: Props) => {
     const [no, setNo] = useState(0)
     const [date, setDate] = useState('')
     const [time, setTime] = useState('')
@@ -47,17 +43,17 @@ const AddBreakdown = ({ item, navigation }: Props) => {
 
     const addAction = () => {
         dispatch(addBreakdown({
-            category, date, info,
+            category, date,
             time, project: proje,
             no, user, location,
-            status: 'Yeni Kayıt'
+            info,
         }))
         navigation.navigate('Main')
     }
 
     return (
         <LinearGradient colors={colorizer.backgroundColor} style={{ flex: 1 }}>
-            <ScrollView style={{ padding: 20 }}>
+            <ScrollView style={{ padding: 20, }}>
                 <View style={styles.textContainer}>
                     <Text>Kayıt No : {no}</Text>
                 </View>
@@ -97,7 +93,8 @@ const AddBreakdown = ({ item, navigation }: Props) => {
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={{
-                            textAlignVertical: 'top'
+                            textAlignVertical: 'top',
+                            flex: 1
                         }}
                         multiline={true}
                         numberOfLines={4}

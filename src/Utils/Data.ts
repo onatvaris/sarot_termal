@@ -1,8 +1,8 @@
 export const Data = [
     {
         id: 1,
-        name: 'Ercan Demir',
+        name: 'Ercan',
         departman: 'TEKNİK SERVİS',
-        password: '123456',
+        password: '123',
     }
 ]
