@@ -41,8 +41,13 @@ const Main = ({ navigation }: Props) => {
 
     const user = useSelector((state: RootState) => state.userResponse)
     const { breakdowns } = useSelector((state: RootState) => state.breakdownResponse)
-    const [Data, setData] = useState([])
+    const [data, setData] = useState([])
 
+
+    useEffect(() => {
+        console.log("object")
+        setData(breakdowns)
+    }, [setData])
 
     const renderItem = ({ item }: { item: Breakdown }) => {
         return <RenderBreakdown item={item} />
@@ -51,10 +56,15 @@ const Main = ({ navigation }: Props) => {
     return (
         <LinearGradient colors={colorizer.backgroundColor} style={{ flex: 1, }}>
             <FlatList
-                data={breakdowns}
+                data={data}
                 renderItem={renderItem}
                 keyExtractor={(item: Breakdown, index: number) => index.toString()}
                 refreshing={false}
+                onRefresh={() => {
+                    console.log(`breakdowns`, breakdowns)
+                    console.log(`data`, data)
+                    setData(breakdowns)
+                }}
             />
             <FloatingAction
                 overlayColor='rgba(255,255,255,0.3)'
