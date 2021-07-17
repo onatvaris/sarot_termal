@@ -4,7 +4,9 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import {
     StyleSheet, Text, View, TextInput,
-    ScrollView
+    ScrollView, Dimensions, Modal,
+    Image,
+    TouchableOpacity
 } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { addBreakdown, RootState } from '../Redux'
@@ -12,7 +14,11 @@ import DesignButton from '../Components/DesignButton'
 import LinearGradient from 'react-native-linear-gradient'
 import { colorizer } from '../Helpers/color'
 import { RootStackParamList } from '../Route/type'
+import ImagePickerModal from '../Components/ImagePickerModal'
+import ImagePicker, { Options } from 'react-native-image-crop-picker';
 
+
+const { height, width } = Dimensions.get('window');
 
 interface Props {
     navigation: StackNavigationProp<RootStackParamList, 'AddBreakdown'>
@@ -26,7 +32,12 @@ const AddBreakdown = ({ navigation }: Props) => {
     const [location, setLocation] = useState('')
     const [category, setCategory] = useState('')
     const [info, setInfo] = useState('')
+    const [modalVisibility, setModalVisibility] = useState(false)
+    const [selectedVisibility, setSelectedVisibility] = useState(false)
+    const [selectedImage, setSelectedImage] = useState<Options | undefined>()
+
     const user = useSelector((state: RootState) => state.userResponse)
+
     const dispatch = useDispatch()
     useEffect(() => {
         const number = Math.floor(Math.random() * 100);
@@ -50,6 +61,33 @@ const AddBreakdown = ({ navigation }: Props) => {
         }))
         navigation.navigate('Main')
     }
+
+    const changedSelectedVisibility = () => {
+        console.log("object")
+        setSelectedVisibility(!selectedVisibility)
+    }
+
+    const cameraImagePicker = () => {
+        setSelectedVisibility(!selectedImage)
+        ImagePicker.openCamera({}).then((image: Options) => {
+            console.log(image);
+            setSelectedImage(image)
+            setModalVisibility(!modalVisibility)
+        });
+    }
+
+    const galleryImagePicker = () => {
+        setSelectedVisibility(!selectedImage)
+        ImagePicker.openPicker({}).then((res: Options) => {
+            setSelectedImage(res)
+            setModalVisibility(!modalVisibility)
+        })
+    }
+
+    const changedModalVisibility = () => {
+        setModalVisibility(!modalVisibility)
+    }
+
 
     return (
         <LinearGradient colors={colorizer.backgroundColor} style={{ flex: 1 }}>
@@ -103,11 +141,56 @@ const AddBreakdown = ({ navigation }: Props) => {
                         onChangeText={setInfo}
                     />
                 </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 15 }}>
-                    <DesignButton text={'Vazgeç'} height={50} width={150} click={cancel} />
-                    <DesignButton text={'Ekle'} height={50} width={150} click={addAction} />
+                <View style={{ marginTop: 15, justifyContent: 'space-around', height: 120 }}>
+
+                    <DesignButton text={'Vazgeç'} height={50} width={width * 0.9} click={cancel} style={{ alignSelf: 'center' }} />
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+
+                        <DesignButton text={'Resim Ekle'} height={50} width={150} click={changedSelectedVisibility} />
+                        <DesignButton text={'Kaydet'} height={50} width={150} click={addAction} />
+
+                    </View>
                 </View>
             </ScrollView>
+            <Modal
+                style={{ flex: 1 }}
+                animationType="fade"
+                transparent
+                visible={selectedVisibility}
+            >
+                <View style={{ flex: 1, backgroundColor: 'rgba(255,255,255,0.5)', justifyContent: 'flex-end' }}>
+                    <View style={{
+                        height: width * 0.2,
+                        width,
+                        justifyContent: 'space-around',
+                        alignItems: 'center',
+                        backgroundColor: 'white',
+                        marginBottom: 30,
+                        flexDirection: 'row'
+                    }}>
+                        <TouchableOpacity onPress={cameraImagePicker}>
+                            <Image
+                                style={{ height: 40, width: 40 }}
+                                source={require('../Assets/camera_alt.png')}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={galleryImagePicker}>
+                            <Image
+                                style={{ height: 40, width: 40 }}
+                                source={require('../Assets/folder.png')}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => setSelectedVisibility(false)}>
+                            <Image
+                                style={{ height: 40, width: 40 }}
+                                source={require('../Assets/cancel.png')}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+            {modalVisibility && <ImagePickerModal setModalVisibility={changedModalVisibility} image={selectedImage} />}
         </LinearGradient>
 
     )

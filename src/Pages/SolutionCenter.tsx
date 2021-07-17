@@ -75,13 +75,13 @@ const SolutionCenter = ({ route, navigation }: Props) => {
                 </View>
                 <View style={{ padding: 30 }}>
                     <View style={styles.textContainer}>
-                        <Text>Çözümleyen Personel : {name}</Text>
+                        <Text>{name}</Text>
                     </View>
                     <View style={styles.textContainer}>
-                        <Text>Tarih : {date}</Text>
+                        <Text>{date}</Text>
                     </View>
                     <View style={styles.textContainer}>
-                        <Text>Saat : {time}</Text>
+                        <Text>{time}</Text>
                     </View>
                     <View style={styles.inputContainer}>
                         <Text>Durum :</Text>

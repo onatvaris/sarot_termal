@@ -45,7 +45,8 @@ const Main = ({ navigation }: Props) => {
 
 
     useEffect(() => {
-        console.log("object")
+        console.log("objectasdas")
+        console.log(`breakdowns`, breakdowns)
         setData(breakdowns)
     }, [setData])
 
