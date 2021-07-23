@@ -4,5 +4,6 @@ export const Data = [
         name: 'Ercan',
         departman: 'TEKNİK SERVİS',
         password: '123',
+        rememberMe:false
     }
 ]

@@ -4,6 +4,7 @@ export interface User {
     name: string
     password: string
     departman: string
+    rememberMe: boolean
 }
 
 export const LOGIN_CHANGED = "LOGIN_CHANGED"

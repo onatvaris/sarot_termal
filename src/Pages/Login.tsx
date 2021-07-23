@@ -10,15 +10,17 @@ import {
     TouchableOpacity,
     StyleSheet,
     Alert,
-    Keyboard
+    Keyboard,
+    KeyboardAvoidingView
 } from 'react-native'
 import { RootStackParamList } from '../Route/type'
 import LinearGradient from 'react-native-linear-gradient';
 import { colorizer } from '../Helpers/color';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { Data } from '../Utils/Data';
-import { useDispatch } from 'react-redux';
-import { loginAction } from '../Redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginAction, RootState } from '../Redux';
+import { ScrollView } from 'react-native-gesture-handler';
 const { height, width } = Dimensions.get('window');
 interface LoginProps {
     navigation: StackNavigationProp<RootStackParamList, 'Login'>
@@ -27,13 +29,16 @@ interface LoginProps {
 const Login: React.FunctionComponent<LoginProps> = ({ navigation }) => {
     const [Name, setName] = useState('')
     const [Password, setPassword] = useState('')
-    const [secure, setSecure] = useState(false)
+    const [secure, setSecure] = useState(true)
     const [check, setCheck] = useState(false)
     const dispatch = useDispatch()
+    const user = useSelector((state: RootState) => state.userResponse)
+    console.log(`user`, user)
     const LoginAction = () => {
         if (Name && Password) {
             const field = Data.find((item) => item.name = 'Ercan Demir')
             if (Password === field?.password) {
+                field.rememberMe = check
                 dispatch(loginAction(field))
                 navigation.reset({ index: 0, routes: [{ name: 'Main' }] })
             } else {
@@ -56,17 +61,17 @@ const Login: React.FunctionComponent<LoginProps> = ({ navigation }) => {
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <LinearGradient colors={colorizer.backgroundColor} style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1, backgroundColor: 'white' }}>
 
                 <View style={{ alignItems: 'center', height: hp('30%'), justifyContent: 'center' }}>
                     <Image
                         style={{ height: 86, width: 357, resizeMode: 'contain' }}
-                        source={require('../Assets/Logo_Sarot.png')}
+                        source={require('../Assets/Logo_Sarot.jpeg')}
                     />
                 </View>
                 <View style={{ flex: 1, alignItems: 'center' }}>
-                    <Text style={{ fontSize: 40, fontWeight: 'bold', fontStyle: 'italic' }}>Giriş</Text>
-                    <View style={{ height: hp('40%'), width: wp('80%'), marginTop: 30, }}>
+                    <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#b38914' }}>Operasyon Merkezi</Text>
+                    <View style={{ height: hp('40%'), width: wp('80%'), marginTop: wp('20%'), }}>
                         <View style={styles.inputContainer}>
                             <Image
                                 style={styles.image}
@@ -91,12 +96,11 @@ const Login: React.FunctionComponent<LoginProps> = ({ navigation }) => {
                                 autoCorrect={false}
                                 style={{ flex: 1, marginLeft: 10 }} />
                             <TouchableOpacity onPress={() => {
-                                console.log(secure)
                                 setSecure(!secure)
                             }}>
                                 <Image
                                     style={[styles.image, { marginRight: 5 }]}
-                                    source={secure ?
+                                    source={!secure ?
                                         require('../Assets/visibility.png') : require('../Assets/visibility_off.png')}
                                 />
                             </TouchableOpacity>
@@ -117,11 +121,11 @@ const Login: React.FunctionComponent<LoginProps> = ({ navigation }) => {
                         <TouchableOpacity
                             onPress={() => LoginAction()}
                             style={styles.button}>
-                            <Text style={{ color: '#fff', fontSize: 18 }}>Giriş Yap</Text>
+                            <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Giriş Yap</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
-            </LinearGradient>
+            </ScrollView>
         </TouchableWithoutFeedback>
     )
 }
@@ -144,7 +148,7 @@ const styles = StyleSheet.create({
     button: {
         height: 50,
         width: wp('40%'),
-        backgroundColor: colorizer.buttonColor,
+        backgroundColor: '#b38914',
         alignSelf: 'center',
         justifyContent: 'center',
         alignItems: 'center',

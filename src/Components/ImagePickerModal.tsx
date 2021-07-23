@@ -24,7 +24,7 @@ const App = ({
     console.log(`image`, image.path)
 
     const openImagePicker = () => {
-
+        setModalVisibility()
     }
 
     const changedModalVisibility = () => {
@@ -39,15 +39,14 @@ const App = ({
             transparent
             onRequestClose={() => {
                 Alert.alert("Modal has been closed.");
-            }}
-        >
+            }}>
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                     <TouchableOpacity
                         style={{ position: 'absolute', right: 0, margin: 20, }}
                         onPress={() => setModalVisibility()}>
                         <Image
-                            style={{ height: 25, width: 25 }}
+                            style={{ height: 25, width: 25, tintColor: '#b38914' }}
                             source={require('../Assets/cancel.png')}
                         />
                     </TouchableOpacity>
@@ -56,8 +55,9 @@ const App = ({
                         alignItems: "center",
                     }}>
                         {/* <View style={{ height: width * 0.7, width: width * 0.87, backgroundColor: '#cccc' }} /> */}
-                        {/* <Image
-                            source={require(`${image.path}`)} /> */}
+                        <Image
+                            style={{ height: width * 0.7, width: width * 0.87, backgroundColor: '#cccc' }}
+                            source={{ uri: image?.path }} />
                         <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 15 }}>
                             <DesignButton
                                 text={'Ekle'}
@@ -67,14 +67,6 @@ const App = ({
                             />
                         </View>
                     </View>
-                    {/* {image ?
-                        <View>
-
-                        </View> :
-                        <View>
-                           
-                        </View>
-                    } */}
                 </View>
             </View>
         </Modal>

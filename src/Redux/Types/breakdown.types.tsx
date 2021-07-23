@@ -1,3 +1,4 @@
+import { Options } from "react-native-image-crop-picker";
 import { User } from "./user.types";
 // breakdown type
 export interface Breakdown {
@@ -9,16 +10,18 @@ export interface Breakdown {
     category: string
     info: string
     user: User
+    imageBreakdown: Options | undefined
     solution?: SolutionCenter
 }
 
 export interface SolutionCenter {
     breakdownNo: number
-    image: string
+    imageSolutionCenter: Options | undefined
     date: string
     time: string
     status: string
     user: User
+    info: string
 }
 
 // userbreakdown type

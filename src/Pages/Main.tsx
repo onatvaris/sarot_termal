@@ -47,6 +47,7 @@ const Main = ({ navigation }: Props) => {
     useEffect(() => {
         console.log("objectasdas")
         console.log(`breakdowns`, breakdowns)
+
         setData(breakdowns)
     }, [setData])
 
@@ -55,7 +56,7 @@ const Main = ({ navigation }: Props) => {
     }
 
     return (
-        <LinearGradient colors={colorizer.backgroundColor} style={{ flex: 1, }}>
+        <View style={{ flex: 1, }}>
             <FlatList
                 data={data}
                 renderItem={renderItem}
@@ -77,7 +78,7 @@ const Main = ({ navigation }: Props) => {
                 }}
                 position='left'
             />
-        </LinearGradient >
+        </ View>
     )
 }
 

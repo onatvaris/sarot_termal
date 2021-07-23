@@ -57,7 +57,7 @@ const AddBreakdown = ({ navigation }: Props) => {
             category, date,
             time, project: proje,
             no, user, location,
-            info,
+            info, imageBreakdown: selectedImage
         }))
         navigation.navigate('Main')
     }
@@ -91,7 +91,7 @@ const AddBreakdown = ({ navigation }: Props) => {
 
     return (
         <LinearGradient colors={colorizer.backgroundColor} style={{ flex: 1 }}>
-            <ScrollView style={{ padding: 20, }}>
+            <ScrollView style={{ paddingHorizontal: 20, }}>
                 <View style={styles.textContainer}>
                     <Text>Kayıt No : {no}</Text>
                 </View>
@@ -122,7 +122,7 @@ const AddBreakdown = ({ navigation }: Props) => {
                     />
                 </View>
                 <View style={styles.inputContainer}>
-                    <Text>Arıza Kategori :</Text>
+                    <Text>Kategori :</Text>
                     <TextInput
                         onChangeText={setCategory}
                         style={styles.textInput}
@@ -141,7 +141,7 @@ const AddBreakdown = ({ navigation }: Props) => {
                         onChangeText={setInfo}
                     />
                 </View>
-                <View style={{ marginTop: 15, justifyContent: 'space-around', height: 120 }}>
+                <View style={{ marginTop: 5, justifyContent: 'space-around', height: 120, paddingBottom: 10 }}>
 
                     <DesignButton text={'Vazgeç'} height={50} width={width * 0.9} click={cancel} style={{ alignSelf: 'center' }} />
 
@@ -157,8 +157,7 @@ const AddBreakdown = ({ navigation }: Props) => {
                 style={{ flex: 1 }}
                 animationType="fade"
                 transparent
-                visible={selectedVisibility}
-            >
+                visible={selectedVisibility}>
                 <View style={{ flex: 1, backgroundColor: 'rgba(255,255,255,0.5)', justifyContent: 'flex-end' }}>
                     <View style={{
                         height: width * 0.2,

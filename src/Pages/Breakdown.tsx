@@ -3,7 +3,11 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useEffect, useState } from 'react'
 import {
     StyleSheet, Text, View, TextInput,
-    ScrollView
+    ScrollView,
+    Modal,
+    Dimensions,
+    TouchableOpacity,
+    Image
 } from 'react-native'
 import { RootStackParamList } from '../Route/type'
 import LinearGradient from 'react-native-linear-gradient'
@@ -16,11 +20,13 @@ interface Props {
 }
 
 
+const { height, width } = Dimensions.get('window');
 
 const Breakdown = ({ navigation, route }: Props) => {
 
     const [scroll, setScroll] = useState(false)
-    const { user, no, date, time, project, location, category, info } = route.params.item
+    const [selectedVisibility, setSelectedVisibility] = useState(false)
+    const { user, no, date, time, project, location, category, info, imageBreakdown } = route.params.item
 
     const cancel = () => {
         navigation.goBack()
@@ -32,8 +38,8 @@ const Breakdown = ({ navigation, route }: Props) => {
 
 
     return (
-        <LinearGradient colors={colorizer.backgroundColor} style={{ flex: 1 }}>
-            <ScrollView style={{ padding: 30, flex: 1, }} >
+        <LinearGradient colors={colorizer.backgroundColor} style={{ flex: 1, }}>
+            <ScrollView style={{ paddingHorizontal: 30, flex: 1, }} >
                 <View style={styles.textContainer}>
                     <Text>Kayıt No : {no}</Text>
                 </View>
@@ -83,13 +89,55 @@ const Breakdown = ({ navigation, route }: Props) => {
                         value={info}
                     />
                 </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 15 }}>
-                    <DesignButton text={'Çözüm Merkezi'} height={50} width={wp('70%')}
+                <View style={{ justifyContent: 'space-around', marginTop: 15, alignItems: 'center', paddingBottom: 30 }}>
+                    <DesignButton text={'Resmi Görüntüle'} height={50} width={wp('70%')}
+                        click={() => setSelectedVisibility(!selectedVisibility)}
+                    />
+                    <DesignButton
+                        text={'Çözüm Merkezi'} height={50} width={wp('70%')}
+                        style={{ marginTop: 15 }}
                         click={() =>
                             navigation.navigate('SolutionCenter',
-                                { item: route.params.item })} />
+                                { item: route.params.item })}
+                    />
                 </View>
             </ScrollView>
+            <Modal
+                style={{ flex: 1 }}
+                animationType="fade"
+                transparent
+                visible={selectedVisibility}
+            >
+                <View style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: 22
+                }}>
+                    <View style={{
+                        margin: 20,
+                        backgroundColor: "white",
+                        borderRadius: 20,
+                        padding: 15,
+                    }}>
+                        <View style={{
+                        }}>
+                            <TouchableOpacity
+                                style={{ position: 'absolute', right: 0, margin: 10, }}
+                                onPress={() => setSelectedVisibility(false)}>
+                                <Image
+                                    style={{ height: 25, width: 25, tintColor: '#b38914' }}
+                                    source={require('../Assets/cancel.png')}
+                                />
+                            </TouchableOpacity>
+                            <Image
+                                style={{ height: width * 0.7, width: width * 0.87, backgroundColor: '#cccc', zIndex: -1 }}
+                                source={{ uri: imageBreakdown?.path }}
+                            />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </LinearGradient>
     )
 }
